@@ -1,0 +1,32 @@
+   public class DragControl : Component
+    {
+        private Control handleControl;
+
+        public Control SelectControl
+        {
+            get
+            {
+                return this.handleControl;
+            }
+            set
+            {
+                this.handleControl = value;
+                this.handleControl.MouseDown += HandleControl_MouseDown;
+            }
+        }
+
+        private void HandleControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            bool flag = e.Button == MouseButtons.Left;
+            if (flag)
+            {
+                DragControl.ReleaseCapture();
+                DragControl.SendMessage(this.SelectControl.FindForm().Handle, 161, 2, 0);
+            }
+        }
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr a, int msg, int wParam,int lParam);
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+    }
